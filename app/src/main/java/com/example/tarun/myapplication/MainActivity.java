@@ -78,13 +78,13 @@ Log.d("length", "" + length);
     @Override
     public void onTimedText(final MediaPlayer mp, final TimedText text) {
         if (text != null) {
+            Log.d("timed","timed");
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     int seconds = mp.getCurrentPosition() / 1000;
 
-                    txtDisplay.setText("[" + secondsToDuration(seconds) + "] "
-                            + text.getText());
+                    txtDisplay.setText(""+text.getText()+"");
                 }
             });
         }
@@ -104,7 +104,8 @@ Log.d("length", "" + length);
             player.setDisplay(holder);
             player.setDataSource("http://herotalkies-vh.akamaihd.net/i/Naaigal_Jaakirathai/Naaigal_Jagirathai_,240,360,480,720,1080,.mp4.csmil/master.m3u8");
             player.prepare();
-            player.addTimedTextSource(getSubtitleFile("https://d3c22qta1xfop2.cloudfront.net/Naaigal_Jaakirathai/sub-Naaigal_Jaakirathai.srt"),MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            String file=getSubtitleFile("https://d3c22qta1xfop2.cloudfront.net/Naaigal_Jaakirathai/sub-Naaigal_Jaakirathai.srt");
+            player.addTimedTextSource(file,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
             int textTrackIndex = findTrackIndexFor(
                     MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, player.getTrackInfo());
             if (textTrackIndex >= 0) {
@@ -116,10 +117,11 @@ Log.d("length", "" + length);
 
         }
         catch (Exception e)
-        {
+        {e.printStackTrace();
         }
 
         player.start();
+        player.seekTo(280000);
 
     }
     private int findTrackIndexFor(int mediaTrackType, MediaPlayer.TrackInfo[] trackInfo) {
