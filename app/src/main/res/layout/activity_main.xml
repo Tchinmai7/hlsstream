@@ -3,12 +3,14 @@
         android:id="@+id/txtDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world"
-        android:textColor="#ffffff"/>
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:text="Hello! World"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        />
 
     <SurfaceView android:id="@+id/surface_view" android:layout_width="match_parent" android:layout_height="fill_parent" android:layout_gravity="center"/>
-    <Button android:id="@+id/button1" android:background="@null" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true"  android:layout_alignParentBottom="true"/>
+    <Button android:id="@+id/button1" android:background="@null" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true"  android:layout_alignParentBottom="true" android:textColor="#ffffff" android:text="pause"/>
     <Button android:id="@+id/button" android:background="@null" android:layout_width="wrap_content" android:layout_height="wrap_content"   android:layout_alignParentLeft="true" android:layout_alignParentBottom="true" android:text="Start"  android:textColor="#ffffff"/>
 </RelativeLayout>

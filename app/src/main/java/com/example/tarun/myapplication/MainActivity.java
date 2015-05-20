@@ -47,7 +47,7 @@ public  SurfaceView surface;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        txtDisplay=(TextView)findViewById(R.id.txtDisplay);
         final Button startB=(Button)findViewById(R.id.button);
         Button stopB=(Button)findViewById(R.id.button1);
          startB.setOnClickListener(new View.OnClickListener() {
