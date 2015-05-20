@@ -7,12 +7,11 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:layout_toRightOf="@+id/button"
         android:layout_toEndOf="@+id/button"
         android:textColor="#ffffff"
         />
-
     <Button android:id="@+id/button1" android:background="@null" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true"  android:layout_alignParentBottom="true" android:textColor="#ffffff" android:text="pause"/>
     <Button android:id="@+id/button" android:background="@null" android:layout_width="wrap_content" android:layout_height="wrap_content"   android:layout_alignParentLeft="true" android:layout_alignParentBottom="true" android:text="Start"  android:textColor="#ffffff"/>
 </RelativeLayout>

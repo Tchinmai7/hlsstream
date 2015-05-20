@@ -102,9 +102,9 @@ Log.d("length", "" + length);
         {
 
             player.setDisplay(holder);
-            player.setDataSource("http://herotalkies-vh.akamaihd.net/i/Naaigal_Jaakirathai/Naaigal_Jagirathai_,240,360,480,720,1080,.mp4.csmil/master.m3u8");
+            player.setDataSource("REDACTED");
             player.prepare();
-            String file=getSubtitleFile("https://d3c22qta1xfop2.cloudfront.net/Naaigal_Jaakirathai/sub-Naaigal_Jaakirathai.srt");
+            String file=getSubtitleFile("REDACTED");
             player.addTimedTextSource(file,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
             int textTrackIndex = findTrackIndexFor(
                     MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, player.getTrackInfo());
