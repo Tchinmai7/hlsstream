@@ -44,6 +44,7 @@ public  SurfaceView surface;
     private TextView txtDisplay;
     private static Handler handler = new Handler();
     public SeekBar seekBar;
+    public boolean subsboolean=true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,13 @@ public  SurfaceView surface;
                   startTrack();
                 else
                     player.start();
+            }
+        });
+        Button subsbut=(Button)findViewById(R.id.subs);
+        subsbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subsboolean=!subsboolean;
             }
         });
         seekBar=(SeekBar)findViewById(R.id.seekbar);
@@ -85,8 +93,10 @@ public  SurfaceView surface;
                 @Override
                 public void run() {
                     int seconds = mp.getCurrentPosition() / 1000;
-
-                    txtDisplay.setText(""+text.getText()+"");
+                    if(subsboolean)
+                      txtDisplay.setText(""+text.getText()+"");
+                    else
+                        txtDisplay.setText("");
                 }
             });
         }
@@ -120,11 +130,7 @@ public  SurfaceView surface;
                       int time= player.getDuration();
                       seekBar.setMax(time);
                       seekBar.postDelayed(onEverySecond, 1000);
-
-                      Log.d("time", time + "");
-
-                      // player.seekTo(280000);
-
+                     Log.d("time", time + "");
                   }catch (Exception e)
                   {
                       e.printStackTrace();

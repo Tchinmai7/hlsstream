@@ -12,11 +12,21 @@
         android:layout_toEndOf="@+id/button"
         android:textColor="#ffffff"
         />
+    <Button android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/subs"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Subs"
+        android:textColor="#ffffff"
+        android:background="@null"
+        />
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/seekbar"
         android:layout_above="@id/txtDisplay"/>
     <Button android:id="@+id/button1" android:background="@null" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true"  android:layout_alignParentBottom="true" android:textColor="#ffffff" android:text="pause"/>
+
     <Button android:id="@+id/button" android:background="@null" android:layout_width="wrap_content" android:layout_height="wrap_content"   android:layout_alignParentLeft="true" android:layout_alignParentBottom="true" android:text="Start"  android:textColor="#ffffff"/>
 </RelativeLayout>
