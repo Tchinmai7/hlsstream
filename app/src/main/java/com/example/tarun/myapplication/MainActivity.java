@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.MediaController;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -35,14 +36,14 @@ import java.net.URLConnection;
 import java.util.Locale;
 
 
-public class MainActivity extends Activity implements MediaPlayer.OnTimedTextListener {
+public class MainActivity extends Activity implements MediaPlayer.OnTimedTextListener,SeekBar.OnSeekBarChangeListener {
 public  SurfaceView surface;
     MediaPlayer  player;
     SurfaceHolder holder;
     int length=0;
     private TextView txtDisplay;
     private static Handler handler = new Handler();
-
+    public SeekBar seekBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,20 +61,21 @@ public  SurfaceView surface;
                     player.start();
             }
         });
-stopB.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-
-        pausetrack();
-    }
-});
+        seekBar=(SeekBar)findViewById(R.id.seekbar);
+        seekBar.setOnSeekBarChangeListener(this);
+        stopB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pausetrack();
+            }
+        });
     }
 
     private void pausetrack()
     {
         player.pause();
         length=player.getCurrentPosition();
-Log.d("length", "" + length);
+        Log.d("length", "" + length);
     }
     @Override
     public void onTimedText(final MediaPlayer mp, final TimedText text) {
@@ -89,39 +91,51 @@ Log.d("length", "" + length);
             });
         }
     }
-    public String secondsToDuration(int seconds) {
-        return String.format("%02d:%02d:%02d", seconds / 3600,
-                (seconds % 3600) / 60, (seconds % 60), Locale.US);
-    }
     private void startTrack()
     {
         player = new MediaPlayer();
         surface = (SurfaceView)findViewById(R.id.surface_view);
         holder = surface.getHolder();
-        try
-        {
+        try {
 
             player.setDisplay(holder);
-            player.setDataSource("REDACTED");
+            player.setDataSource(movie);
             player.prepare();
-            String file=getSubtitleFile("REDACTED");
-            player.addTimedTextSource(file,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
-            int textTrackIndex = findTrackIndexFor(
-                    MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, player.getTrackInfo());
-            if (textTrackIndex >= 0) {
-                player.selectTrack(textTrackIndex);
-            } else {
-                Log.w("ssss", "Cannot find text track!");
-            }
-            player.setOnTimedTextListener(this);
 
+            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                  try {
+                      String file = getSubtitleFile(subs);
+                      player.addTimedTextSource(file, MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+                      int textTrackIndex = findTrackIndexFor(
+                              MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, player.getTrackInfo());
+                      if (textTrackIndex >= 0) {
+                          player.selectTrack(textTrackIndex);
+                      } else {
+                          Log.w("ssss", "Cannot find text track!");
+                      }
+                      player.setOnTimedTextListener(MainActivity.this);
+                      player.start();
+                      int time= player.getDuration();
+                      seekBar.setMax(time);
+                      seekBar.postDelayed(onEverySecond, 1000);
+
+                      Log.d("time", time + "");
+
+                      // player.seekTo(280000);
+
+                  }catch (Exception e)
+                  {
+                      e.printStackTrace();
+                  }
+                }
+            });
         }
         catch (Exception e)
         {e.printStackTrace();
         }
 
-        player.start();
-        player.seekTo(280000);
 
     }
     private int findTrackIndexFor(int mediaTrackType, MediaPlayer.TrackInfo[] trackInfo) {
@@ -133,6 +147,21 @@ Log.d("length", "" + length);
         }
         return index;
     }
+    private Runnable onEverySecond=new Runnable() {
+
+        @Override
+        public void run() {
+
+            if(seekBar != null) {
+                seekBar.setProgress(player.getCurrentPosition());
+            }
+
+            if(player.isPlaying()) {
+                seekBar.postDelayed(onEverySecond, 1000);
+            }
+
+        }
+    };
      private String getSubtitleFile(String url) {
          getSubs s=new getSubs();
          s.execute(url);
@@ -143,7 +172,26 @@ Log.d("length", "" + length);
          return fname;
      }
 
-        private class getSubs extends AsyncTask<String,String,String>
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+        if(fromUser) {
+            // this is when actually seekbar has been seeked to a new position
+            player.seekTo(progress);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    private class getSubs extends AsyncTask<String,String,String>
     {
 
         @Override
@@ -156,7 +204,6 @@ Log.d("length", "" + length);
 
                 // this will be useful so that you can show a tipical 0-100%
                 // progress bar
-                int lenghtOfFile = conection.getContentLength();
 
                 // download the file
                 InputStream input = new BufferedInputStream(url.openStream(),
@@ -193,19 +240,6 @@ Log.d("length", "" + length);
 
             return null;
 
-        }
-    }
-    private void closeStreams(Closeable... closeables) {
-        if (closeables != null) {
-            for (Closeable stream : closeables) {
-                if (stream != null) {
-                    try {
-                        stream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
         }
     }
     @Override
