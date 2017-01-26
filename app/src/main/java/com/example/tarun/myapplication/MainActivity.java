@@ -45,6 +45,8 @@ public  SurfaceView surface;
     private static Handler handler = new Handler();
     public SeekBar seekBar;
     public boolean subsboolean=true;
+    public static String movie="";
+    public static String subs="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
